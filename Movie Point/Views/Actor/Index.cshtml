@@ -1,0 +1,14 @@
+﻿@model List<Actor>
+
+<div class=" container" style="width:800px">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-3">
+                <a  href="/Actor/GetActor/@item.Id"> <img src="~/images/cast/@item.ProfilePicture" /> </a>
+                <p>@item.FirstName  @item.LastName</p>
+            </div>
+        }
+    </div>
+    
+</div>

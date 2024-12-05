@@ -1,0 +1,25 @@
+﻿@model List<Category>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr class="text-center">
+
+            <th scope="col">Category</th>
+            <th scope="col">Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr class="text-center">
+
+                <td>@item.Name</td>
+                <td><a href="/Category/GetCategoryMovies?CategoryName=@item.Name">show all Movies</a></td>
+            </tr>
+
+        }
+
+    </tbody>
+</table>

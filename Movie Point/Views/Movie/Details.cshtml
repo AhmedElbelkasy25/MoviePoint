@@ -1,0 +1,70 @@
+﻿@model Movie
+
+<div class="card mb-3" style="max-width: 100%;">
+    <h2 class="card-title text-center">@Model.Name</h2>
+    <div class="row g-0">
+        <div class="col-md-4">
+            <img src="~/images/movies/@Model.ImgUrl"
+                 alt=""
+                 class="img-fluid rounded-start" />
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+               
+                <p class="card-text">
+                    @Model.Description
+                </p>
+                <p class="card-text">
+                    <span>Category:</span> <a href="/Category/getCategoryMovies?CategoryName=@Model.Category.Name"> @Model.Category.Name</a>
+                </p>
+                <p class="card-text">
+                    <span>Cinema:</span> <a href="/Cinema/getCinemaMovies?CinemaName=@Model.Cinema.Name"> @Model.Cinema.Name</a>
+                </p>
+                <p class="card-text">
+                    <span>Price:</span> @Model.Price EGP
+                </p>
+                <p class="card-text">
+                    <span>Start Date:</span> @Model.StartDate.ToString("yyyy-MM-dd")
+                </p>
+                <p class="card-text">
+                    <span>End Date:</span>  @Model.EndDate.ToString("yyyy-MM-dd")
+                </p>
+                @if (Model.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Upcoming)
+                {
+                    <span class="p-1 mb-3 bg-gradient">@Model.MovieStatus</span>
+                }
+                @if (Model.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Available)
+                {
+                    <span class="p-1 mb-3 bg-light">@Model.MovieStatus</span>
+                }
+                @if (Model.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Expired)
+                {
+                    <span class="p-1  bg-warning">@Model.MovieStatus</span>
+                }
+                <p class="card-text mt-3">
+                    <span>Actores:</span>
+                    <div class="d-flex ">
+                        @foreach (var item in Model.actorsMovies)
+                        {
+                            <div class="m-2">
+                                <a href="/Actor/GetActor/@item.Actor.Id"> <img src="~/images/cast/@item.Actor.ProfilePicture" /> </a>
+                                <p>
+                                    @item.Actor.FirstName @* @item.Actor.LastName *@
+                                </p>
+                            </div>
+                            
+                        }
+                    </div>
+                </p>
+                <p class="card-text">
+                    <div>
+                        <p>Trailer</p>
+                    </div>
+                    <video src="@Model.TrailerUrl" controls>
+                        Your browser does not support the video tag.
+                    </video>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
