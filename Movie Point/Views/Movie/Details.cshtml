@@ -24,6 +24,9 @@
                     <span>Price:</span> @Model.Price EGP
                 </p>
                 <p class="card-text">
+                    <span>Watches:</span> @Model.NumOfWatch
+                </p>
+                <p class="card-text">
                     <span>Start Date:</span> @Model.StartDate.ToString("yyyy-MM-dd")
                 </p>
                 <p class="card-text">
@@ -44,14 +47,14 @@
                 <p class="card-text mt-3">
                     <span>Actores:</span>
                     <div class="d-flex ">
-                        @foreach (var item in Model.actorsMovies)
-                        {
-                            <div class="m-2">
-                                <a href="/Actor/GetActor/@item.Actor.Id"> <img src="~/images/cast/@item.Actor.ProfilePicture" /> </a>
-                                <p>
-                                    @item.Actor.FirstName @* @item.Actor.LastName *@
-                                </p>
-                            </div>
+                        @foreach (var item in Model.actorsMovies) 
+                        { 
+                             <div class="m-2"> 
+                                 <a href="/Actor/GetActor/@item.Actor.Id"> <img src="~/images/cast/@item.Actor.ProfilePicture" /> </a> 
+                                 <p> 
+                                     @item.Actor.FirstName @* @item.Actor.LastName *@
+                                 </p> 
+                             </div> 
                             
                         }
                     </div>

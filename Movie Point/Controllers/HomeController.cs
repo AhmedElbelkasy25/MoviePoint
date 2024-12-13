@@ -3,21 +3,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Movie_Point.Data;
 using Movie_Point.Models;
+using Movie_Point.Repository.IRepository;
 
 namespace Movie_Point.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _dbContext = new ApplicationDbContext();
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IMovieRepository _movieRepository;
+        public HomeController(ILogger<HomeController> logger , IMovieRepository movieRepository)
         {
             _logger = logger;
+            _movieRepository = movieRepository;
+
         }
 
         public IActionResult Index()
         {
-            var movie = _dbContext.Movies.Include(e=>e.Cinema).Include(e=>e.Category).ToList();
+            var movie = _movieRepository.Get(includeProps:e=>e.Include(e => e.Cinema)
+            .Include(e => e.Category)).ToList();
             foreach(var item in movie)
             {   
                 if(item.StartDate > DateTime.Now)
@@ -27,8 +31,9 @@ namespace Movie_Point.Controllers
                 else
                     item.MovieStatus = Data.Enums.MovieStatus.Expired;
             }
-            _dbContext.SaveChanges();
-            return View(movie);
+            _movieRepository.Saving();
+            return RedirectToAction("Index","Movie");
+            //return View(movie);
         }
         public IActionResult NotFoundPage()
         {

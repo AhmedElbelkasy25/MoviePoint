@@ -1,12 +1,35 @@
-﻿@model List<Cinema>
+﻿@section Scripts {
 
-
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
+    }
+}
+@model List<Cinema>
+<head>
+    <title>
+        Cinema List
+    </title>
+    <script type="text/javascript">
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this category?");
+        }
+    </script>
+</head>
+<div>
+    <a href="/Cinema/Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Create Cinema
+    </a>
+</div>
 <table class="table table-striped">
     <thead>
         <tr class="text-center">
             
             <th scope="col">Cinema</th>
-            <th scope="col">Action</th>
+            <th scope="col">Show All</th>
+            <th scope="col">Actions</th>
             
         </tr>
     </thead>
@@ -17,6 +40,14 @@
                 
                 <td>@item.Name</td>
                 <td><a href="/Cinema/GetCinemaMovies?CinemaName=@item.Name">show all Movies</a></td>
+                <td>
+                    <a href="/Cinema/Delete/@item.Id" class="btn btn-warning" onclick="return confirmDelete()">
+                        Delete
+                        <i class="bi bi-trash"></i>
+                    </a>
+                    <a href="/Cinema/Edit/@item.Id" class="btn btn-success"> Edit <i class="bi bi-gear"></i> </a>
+                    
+                </td>
             </tr>
 
         }
