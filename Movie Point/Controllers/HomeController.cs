@@ -32,8 +32,8 @@ namespace Movie_Point.Controllers
                     item.MovieStatus = Data.Enums.MovieStatus.Expired;
             }
             _movieRepository.Saving();
-            return RedirectToAction("Index","Movie");
-            //return View(movie);
+            //return RedirectToAction("Index","Movie");
+            return View(movie);
         }
         public IActionResult NotFoundPage()
         {

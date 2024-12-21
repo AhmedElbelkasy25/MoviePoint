@@ -1,4 +1,15 @@
-﻿@model List<Movie_Point.Models.Movie>
+﻿@section Scripts {
+
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
+    }
+}
+
+
+@model List<Movie_Point.Models.Movie>
 
 <div class="container mt-4">
     <h2 class="text-center mb-4">Movie Collection</h2>

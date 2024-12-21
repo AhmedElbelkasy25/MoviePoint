@@ -2,6 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Movie_Point.Data;
 using Movie_Point.Repository.IRepository;
 using Movie_Point.Repository;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Movie_Point.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Movie_Point
 {
@@ -18,10 +22,21 @@ namespace Movie_Point
             builder.Services.AddDbContext<ApplicationDbContext>(
                 option => option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
                 );
+
+            // Add Identity services.
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+
+
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            //Add connection 
+
             
+
+            //Add connection 
+
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
             builder.Services.AddScoped<IMovieRepository, MovieRepository>();
             builder.Services.AddScoped<IActorRepository, ActorRepository>();

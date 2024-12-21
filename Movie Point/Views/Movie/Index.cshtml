@@ -17,70 +17,43 @@
                 <i class="bi bi-plus-circle"></i> Create Movie
             </a>
         </div>
-        @foreach (var item in Model)
-        {
-            <div class="col-md-4 d-flex align-items-stretch">
-                <div class="card mb-4 shadow-sm">
-                    <div class="text-center"> <h5>@item.Name</h5></div>
-                    <img src="~/images/movies/@item.ImgUrl" class="card-img-top" style="max-height:400px; width:auto" alt="@item.Name">
-                    <div class="card-body">
-                        <h5 class="card-title text-primary">
-                            Cinema :
-                            <a href="/cinema/getCinemaMovies?CinemaName=@item.Cinema.Name">@item.Cinema.Name </a>
-                        </h5>
-                        <h5 class="card-title text-primary">
-                            Category :
-                            <a href="/Category/getCategoryMovies?CategoryName=@item.Category.Name">@item.Category.Name</a>
-                        </h5>
-                        <p class="card-text">
-                            price: @item.Price EGP
-                        </p>
-                        <p class="card-text">
-                            Watches: @item.NumOfWatch 
-                        </p>
-                        <p class="card-text">
-                        <p class="text">start Date: @item.StartDate.ToString("yyyy-MM-dd")</p>
-                        <p class="text">End Date: @item.EndDate.ToString("yyyy-MM-dd")</p>
-                        </p>
-                        @if (item.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Upcoming)
-                        {
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="p-2" style="background-color:saddlebrown">@item.MovieStatus</span>
-                                <span> <a id="aa" href="" style="background-color:green;width:150px" class="btn ml-5 p-1">Book Now</a></span>
-                            </div>
-                        }
-                        @if (item.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Available)
-                        {
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="p-2" style="background-color:gold">@item.MovieStatus</span>
-                                <span> <a id="aa" href="" style="background-color:green;width:150px" class="btn ml-5 p-1">Book Now</a></span>
-                            </div>
-                        }
-                        @if (item.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Expired)
-                        {
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="p-2" style="background-color:red">@item.MovieStatus</span>
-                                <span> <a href="" style="background-color:darkslategrey;width:150px" class="btn ml-5 p-1">Book Now</a></span>
-                            </div>
-                        }
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a href="/Movie/details/@item.Id" class="btn btn-sm btn-outline-primary mt-2">
-                                <i class="bi bi-info-circle"></i> Details
-                            </a>
+        <table class="table table-striped">
+            <thead>
+                <tr class="text-center">
 
-                        </div>
-                        <div>
+                    <th scope="col">Movie</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Number of Watches</th>
+                    <th scope="col">Cinema</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Actions</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="text-center">
+
+                        <td>@item.Name</td>  
+                        <td> @item.MovieStatus</td>
+                        <td> @item.NumOfWatch</td>
+                        <td><a class="btn btn-dark" href="/Cinema/GetCinemaMovies?CinemaName=@item.Cinema.Name">  @item.Cinema.Name  </a> </td>
+                        <td> <a class="btn btn-dark" href="/Category/GetCategoryMovies?CategoryName=@item.Category.Name"> @item.Category.Name</a></td>
+                        <td>
                             <a href="/Movie/Delete/@item.Id" class="btn btn-warning" onclick="return confirmDelete()">
                                 Delete
                                 <i class="bi bi-trash"></i>
                             </a>
                             <a href="/Movie/Edit/@item.Id" class="btn btn-success"> Edit <i class="bi bi-gear"></i> </a>
 
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
+                        </td>
+                    </tr>
+
+                }
+
+            </tbody>
+        
     </div>
 </div>
 

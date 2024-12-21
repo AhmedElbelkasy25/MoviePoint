@@ -27,24 +27,46 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Management System</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/Movie/Index">Movies</a>
-                                <a class="dropdown-item" href="/Cinema/Index">Cinemas</a>
-                                <a class="dropdown-item" href="/Category/Index">Categories</a>
-                                <a class="dropdown-item" href="/Actor/Index">Actor</a>
-                                
-                                
-                            </div>
-                        </li>
-                        </li>
+                        @if(User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Management System</a>
+                                <div class="dropdown-menu">
+                                    <a class="dropdown-item" href="/Movie/Index">Movies</a>
+                                    <a class="dropdown-item" href="/Cinema/Index">Cinemas</a>
+                                    <a class="dropdown-item" href="/Category/Index">Categories</a>
+                                    <a class="dropdown-item" href="/Actor/Index">Actor</a>
+
+
+                                </div>
+                            </li>
+                            </li>
+                        }
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if(User.Identity.IsAuthenticated)
+                        {
+                            <li> <span>Welcome </span> <a class="btn btn-dark" href="/account/GetProfile?name=@User.Identity.Name"> @User.Identity.Name </a></li>
+                            <li> <a class="btn btn-light" href="/Account/Logout">Logut </a></li>
+                        }
+                        else{
+                            <li> <a class="btn btn-light" href="/Account/Login">Login </a></li>
+                            <li> <a class="btn btn-light" href="/Account/Register">Register </a></li>
+                        }
                     </ul>
                     <form class="d-flex" id="form1" asp-action="SearchForMovie" asp-controller="Movie" method="post">
-                        <input class="form-control" type="Text" name="Name" placeholder="Search For Movie" />
-                        <button class="btn btn-danger" type="submit"> Search</button>
+                        <input class="form-control" type="Text" id="name" name="Name" placeholder="Search For Movie" />
+                        <button type="submit" class="btn btn-danger" > Search   </button>
                     </form>
+
+                    @* <div>
+                        <input type="text" id="name" placeholder="Enter movie name" />
+                        <button onclick="getMovie()">Search</button>
+                    </div>
+
+                    <div id="movieList"></div> *@
+
                 </div>
             </div>
         </nav>
@@ -61,9 +83,65 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+   @*  <script>
+        function getMovie(){
+            var movieName = $("#name").val();
+
+            $.ajax({
+                url: '@Url.Action("SearchForMovie","Movie")' ,
+                type: 'POST' ,
+                dataType: 'json' ,
+                data:{
+                    Name:movieName
+                }, 
+                success : function()
+
+            })
+        }
+    </script> *@
+
+    @section scripts{
+        <script >
+            function getMovie() {
+                var movieName = $("#name").val();
+
+                $.ajax({
+                    url: '/Movie/SearchForMovie', // Updated to match the action in the controller
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify({
+                name: movieName,
+                __RequestVerificationToken: $("input[name='__RequestVerificationToken']").val()
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                            // Handle the success case (e.g., display movie data)
+                            console.log(response.data);
+                            var movies = response.data;
+                            var movieList = movies.map(movie => `<li>${movie.name} - ${movie.cinema.name} (${movie.category.name})</li>`).join('');
+                            $("#movieList").html(`<ul>${movieList}</ul>`);
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error: " + error);
+                        alert("An error occurred while fetching movies.");
+                    }
+                });
+            }
+
+
+
+        </script>
+    }
+
     
     
     @await RenderSectionAsync("Scripts", required: false)

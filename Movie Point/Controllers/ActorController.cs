@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Movie_Point.Data;
 using Movie_Point.Models;
@@ -7,7 +8,7 @@ using Movie_Point.Repository.IRepository;
 
 namespace Movie_Point.Controllers
 {
-    
+    [Authorize(Roles = "Admin")]
     public class ActorController : Controller
     {
         private readonly IActorRepository _actorRepository;
@@ -17,12 +18,14 @@ namespace Movie_Point.Controllers
             _actorRepository = actorRepository;
             _movieRepository = MovieRepository;
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
             //var Actors = _dbContext.Actors.ToList();
             var Actors = _actorRepository.Get().ToList();
             return View(model:Actors);
         }
+        [AllowAnonymous]
         public IActionResult GetActor(int id)
         {
             var Actor = _actorRepository.GetOne(e=>e.Id == id );
@@ -57,7 +60,7 @@ namespace Movie_Point.Controllers
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
                     // Save in wwwroot
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\cast", fileName);
 
                     using (var stream = System.IO.File.Create(filePath))
                     {
@@ -71,7 +74,7 @@ namespace Movie_Point.Controllers
                 _actorRepository.Create(actor);
 
                 
-                TempData["success"] = "Add product successfuly";
+                TempData["success"] = "Add Actor successfully";
 
                 return RedirectToAction("Index");
             }
@@ -101,7 +104,7 @@ namespace Movie_Point.Controllers
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
                     // Save in wwwroot
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\cast", fileName);
 
                     using (var stream = System.IO.File.Create(filePath))
                     {
@@ -109,7 +112,7 @@ namespace Movie_Point.Controllers
                     }
 
                     // Delete old img
-                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", oldActor.ProfilePicture);
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\cast", oldActor.ProfilePicture);
                     if (System.IO.File.Exists(oldPath))
                     {
                         System.IO.File.Delete(oldPath);
@@ -124,7 +127,7 @@ namespace Movie_Point.Controllers
 
                 _actorRepository.Alter(actor);
 
-                TempData["success"] = "Update actor successfuly";
+                TempData["success"] = "Update actor successfully";
 
                 return RedirectToAction("Index");
             }

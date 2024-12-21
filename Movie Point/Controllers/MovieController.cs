@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 using Movie_Point.Models;
@@ -6,6 +7,7 @@ using Movie_Point.Repository.IRepository;
 
 namespace Movie_Point.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class MovieController : Controller
     {
         //private readonly ApplicationDbContext _dbContext = new ApplicationDbContext();
@@ -24,30 +26,50 @@ namespace Movie_Point.Controllers
             _actorRepository = actorRepository;
             _actorMovieRepository = actorMovieRepository;
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var movies = _movieRepository.Get(includeProps: e => e.Include(e => e.Cinema).Include(e => e.Category)).ToList();
             return View(movies);
         }
+
+        [AllowAnonymous]
         public IActionResult Details(int id)
         {
-
+            
             var movie = _movieRepository.GetOne(filter: e => e.Id == id, includeProps: e => e.Include(e => e.Cinema)
                 .Include(e => e.Category).Include(e => e.actorsMovies).ThenInclude(e => e.Actor));
             movie.NumOfWatch++;
             _movieRepository.Saving();
             return View(movie);
         }
+        //[AllowAnonymous]
+        //[HttpPost]
+        //public IActionResult SearchForMovie(string name)
+        //{
+        //    var movies = _movieRepository.Get(
+        //        e => e.Name.Contains(name),
+        //        includeProps: e => e.Include(e => e.Cinema).Include(e => e.Category)
+        //    ).ToList();
+
+        //    if (movies != null && movies.Any())
+        //    {
+        //        // Return movie details as JSON
+        //        return Json(new { success = true, data = movies });
+        //    }
+
+        //    return Json(new { success = false, message = "No movies found." });
+        //}
+
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult SearchForMovie(string Name)
         {
-            //var movies = _dbContext.Movies.Include(e => e.Cinema).
-            //    Include(e => e.Category).Where(e => e.Name.Contains(Name)).ToList();
             var movies = _movieRepository.Get(e => e.Name.Contains(Name), includeProps: e => e.Include(e => e.Cinema).Include(e => e.Category)).ToList();
-            if (movies != null)
+            if (movies.Count !=0)
                 return View(movies);
             return RedirectToAction("NotFoundPage", "Home");
-        } 
+        }
         public IActionResult Create()
         {
             var categories = _categoryRepository.Get().ToList();
@@ -91,7 +113,7 @@ namespace Movie_Point.Controllers
                 {
                     _actorMovieRepository.Create(new ActorMovie { MovieId = lastMovie.Id, ActorId = ActorId[i] });
                 }
-                TempData["message"] = "Add product successfuly";
+                TempData["success"] = "Add Movie successfully";
                 return RedirectToAction("index");
 
             }
@@ -135,14 +157,14 @@ namespace Movie_Point.Controllers
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
                     // Save in wwwroot
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\movies", fileName);
 
                     using (var stream = System.IO.File.Create(filePath))
                     {
                         file.CopyTo(stream);
                     }
                     //delete old img
-                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", oldMovie.ImgUrl);
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\movis", oldMovie.ImgUrl);
                     if (System.IO.File.Exists(oldPath))
                     {
                         System.IO.File.Delete(oldPath);
@@ -156,7 +178,7 @@ namespace Movie_Point.Controllers
                     movie.ImgUrl = oldMovie.ImgUrl;
                 }
                 _movieRepository.Alter(movie);
-                TempData["message"] = "Edit product successfuly";
+                TempData["success"] = "Edit Movie successfully";
                 var actorMovie =_actorMovieRepository.Get(e => e.MovieId == movie.Id).ToList();
                 foreach(var item in actorMovie)
                 {
@@ -189,7 +211,7 @@ namespace Movie_Point.Controllers
             if (movie == null) return RedirectToAction("NotFoundPage", "Home");
 
             // Delete old img
-            var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", movie.ImgUrl);
+            var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\movies", movie.ImgUrl);
             if (System.IO.File.Exists(oldPath))
             {
                 System.IO.File.Delete(oldPath);
@@ -197,7 +219,7 @@ namespace Movie_Point.Controllers
 
             _movieRepository.Delete(movie);
 
-            TempData["success"] = "Delete product successfuly";
+            TempData["success"] = "Delete Movie successfully";
 
             return RedirectToAction("Index");
         }

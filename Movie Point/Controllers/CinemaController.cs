@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Movie_Point.Data;
 using Movie_Point.Models;
@@ -7,6 +8,7 @@ using Movie_Point.Repository.IRepository;
 
 namespace Movie_Point.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CinemaController : Controller
     {
         private readonly ICinemaRepository _cinemaRepository;
@@ -17,13 +19,13 @@ namespace Movie_Point.Controllers
             _cinemaRepository = cinemaRepository;
             _movieRpository = movieRpository;
         }
-
+        [Authorize]
         public IActionResult Index()
         {
             var cinemas = _cinemaRepository.Get().ToList();
             return View(cinemas);
         }
-
+        [Authorize]
         public IActionResult GetCinemaMovies(string CinemaName)
         {
             ViewBag.cinema = CinemaName;

@@ -4,8 +4,10 @@ using Movie_Point.Data;
 using Movie_Point.Repository.IRepository;
 using Movie_Point.Models;
 using Movie_Point.Repository;
+using Microsoft.AspNetCore.Authorization;
 namespace Movie_Point.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class CategoryController : Controller
     {
         private readonly ICategoryRepository _categoryRepository;
@@ -15,13 +17,14 @@ namespace Movie_Point.Controllers
             _categoryRepository = categoryRepository;
             _movieRepository = movieRepository;
         }
+        [Authorize]
         public IActionResult Index()
         {
             var categories = _categoryRepository.Get().ToList();
 
             return View(model:categories);
         }
-
+        [Authorize]
         public IActionResult GetCategoryMovies(string CategoryName)
         {
             ViewBag.Category = CategoryName;
