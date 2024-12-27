@@ -61,7 +61,8 @@ namespace Movie_Point.Controllers
                     Name = userLog.Name,
                     Email = userLog.Email,
                     PhoneNumber = userLog.PhoneNumber,
-                    ImgUrl = userLog.ImgUrl
+                    ImgUrl = userLog.ImgUrl,
+                    ISBlocked = false
 
                 };
 
@@ -98,21 +99,26 @@ namespace Movie_Point.Controllers
             {
                 var appUserWithEmail = await _userManager.FindByEmailAsync(log.Account);
                 var appUserWithUserName = await _userManager.FindByNameAsync(log.Account);
-
-                if (appUserWithEmail != null || appUserWithUserName != null)
-                { 
-                    var result = await _userManager.CheckPasswordAsync(appUserWithEmail ?? appUserWithUserName
-                        , log.Password);
+                var appUser = appUserWithEmail ?? appUserWithUserName;
+                if (appUser != null)
+                {
+                    if (await _userManager.IsLockedOutAsync(appUser))
+                       {
+                        ModelState.AddModelError(string.Empty, "This account has been blocked.");
+                        return View(log);
+                    }
+                    //var result = await _userManager.CheckPasswordAsync(appUserWithEmail ?? appUserWithUserName , log.Password);
+                    var result = await _userManager.CheckPasswordAsync(appUser, log.Password);
                     if (result)
                     {
-                        await _signInManager.SignInAsync(appUserWithEmail ?? appUserWithUserName, log.RememberMe);
+                        await _signInManager.SignInAsync(appUser,
+                            log.RememberMe);
                         return RedirectToAction("Index", "Home");
                     }
                     else
                     {
                         ModelState.AddModelError(string.Empty, "Your account or Password is not correct");
                     }
-                
                 }
                 else
                 {

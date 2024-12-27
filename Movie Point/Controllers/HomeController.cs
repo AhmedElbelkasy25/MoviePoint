@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Movie_Point.Data;
 using Movie_Point.Models;
+using Movie_Point.Models.ViewModels;
 using Movie_Point.Repository.IRepository;
 
 namespace Movie_Point.Controllers
@@ -18,11 +19,11 @@ namespace Movie_Point.Controllers
 
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int pageNumber=1 , int numOfItems = 9)
         {
-            var movie = _movieRepository.Get(includeProps:e=>e.Include(e => e.Cinema)
-            .Include(e => e.Category)).ToList();
-            foreach(var item in movie)
+            var movies = _movieRepository.Get(includeProps:e=>e.Include(e => e.Cinema)
+            .Include(e => e.Category));
+            foreach(var item in movies)
             {   
                 if(item.StartDate > DateTime.Now)
                     item.MovieStatus = Data.Enums.MovieStatus.Upcoming;
@@ -32,8 +33,16 @@ namespace Movie_Point.Controllers
                     item.MovieStatus = Data.Enums.MovieStatus.Expired;
             }
             _movieRepository.Saving();
-            //return RedirectToAction("Index","Movie");
-            return View(movie);
+
+            int pages = (int)Math.Ceiling((double)movies.Count() / numOfItems);
+            movies = movies.Skip((pageNumber -1) * numOfItems).Take(numOfItems);
+            moviePaginationVM paginationVM = new moviePaginationVM() {
+            Movies=movies.ToList(),
+            Pages=pages,
+            PageNumber=pageNumber
+            };
+            
+            return View(paginationVM);
         }
         public IActionResult NotFoundPage()
         {

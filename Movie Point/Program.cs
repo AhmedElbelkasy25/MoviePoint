@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Movie_Point.Models;
 using Microsoft.Extensions.DependencyInjection;
+using Stripe;
 
 namespace Movie_Point
 {
@@ -27,7 +28,13 @@ namespace Movie_Point
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-
+            //builder.Services.Configure<IdentityOptions>(options =>
+            //{
+            //    // Lockout settings
+            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.MaxValue;
+            //    options.Lockout.MaxFailedAccessAttempts = 3;
+            //    options.Lockout.AllowedForNewUsers = true;
+            //});
 
 
             // Add services to the container.
@@ -42,6 +49,11 @@ namespace Movie_Point
             builder.Services.AddScoped<IActorRepository, ActorRepository>();
             builder.Services.AddScoped<ICinemaRepository, CinemaRepository>();
             builder.Services.AddScoped<IActorMovieRepository, ActorMovieRepository>();
+            builder.Services.AddScoped<ICartRepository,CartRepository>();
+
+            // Configure Stripe
+            builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+            StripeConfiguration.ApiKey = builder.Configuration["Stripe:SecretKey"];
 
             var app = builder.Build();
 

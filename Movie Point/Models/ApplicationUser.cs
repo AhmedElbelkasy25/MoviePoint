@@ -7,6 +7,7 @@ namespace Movie_Point.Models
         public string Name { get; set; }
         public string? Address { get; set; }
         public string? ImgUrl { get; set; }
+        public bool? ISBlocked { get; set; } = false;
 
     }
 }

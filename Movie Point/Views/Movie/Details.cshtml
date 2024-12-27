@@ -35,10 +35,20 @@
                 @if (Model.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Upcoming)
                 {
                     <span class="p-1 mb-3 bg-gradient">@Model.MovieStatus</span>
+                    <form asp-action="AddToCart" asp-controller="Cart">
+                        <input type="hidden" value="@Model.Id" name="MovieId" />
+                        <input placeholder="HowMany Tickets" type="number" name="Count" class=" form-control-sm col-md-2" />
+                        <button type="submit" class="btn btn-outline-primary"> Book A Ticket Now</button>
+                    </form>
                 }
                 @if (Model.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Available)
                 {
                     <span class="p-1 mb-3 bg-light">@Model.MovieStatus</span>
+                    <form asp-action="AddToCart" asp-controller="Cart">
+                        <input type="hidden" value="@Model.Id" name="MovieId" />
+                        <input placeholder="HowMany Tickets" type="number" name="Count" class=" form-control-sm col-md-2" />
+                        <button type="submit" class="btn btn-outline-primary"> Book A Ticket Now</button>
+                    </form>
                 }
                 @if (Model.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Expired)
                 {
