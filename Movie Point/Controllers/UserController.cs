@@ -51,7 +51,7 @@ namespace Movie_Point.Controllers
             {
                 await _userManager.SetLockoutEnabledAsync(user, true);
                 var result =await _userManager.SetLockoutEndDateAsync(user,DateTime.Now.AddYears(100));
-                await _userManager.SetLockoutEnabledAsync(user, false);
+                //await _userManager.SetLockoutEnabledAsync(user, false);
                 if (result.Succeeded)
                 {
                     user.ISBlocked = true;
@@ -72,7 +72,7 @@ namespace Movie_Point.Controllers
             var user = await _userManager.FindByIdAsync(userId);
             if (user != null)
             {
-                await _userManager.SetLockoutEnabledAsync(user, true);
+                //await _userManager.SetLockoutEnabledAsync(user, true);
                 var result = await _userManager.SetLockoutEndDateAsync(user, null);
                 await _userManager.SetLockoutEnabledAsync(user, false);
                 
