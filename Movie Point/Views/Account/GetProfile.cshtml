@@ -1,5 +1,15 @@
 ﻿@model Movie_Point.Models.ApplicationUser
 
+
+@section Scripts {
+
+    @if (@TempData["success"] != null)
+    {
+        <script>
+            toastr.success('@TempData["success"]')
+        </script>
+    }
+}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,10 +24,24 @@
             <div class="col-md-8">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white text-center">
-                        <img src="~/images/AdminImg/@Model.ImgUrl"
+                        @if(Model.ImgUrl == null)
+                            {
+                                <img src="~/images/AdminImg/Basic_Ui__28186_29.jpg"
+                                 alt="Profile Picture"
+                                 class="rounded-circle mb-3"
+                                 style="width: 150px; height: 150px; object-fit: cover;">
+                            }
+                        else
+                        {   
+                            <img src="~/images/AdminImg/@Model.ImgUrl"
                              alt="Profile Picture"
                              class="rounded-circle mb-3"
                              style="width: 150px; height: 150px; object-fit: cover;">
+                        }
+                        <div>
+                            <a href="/Account/ChangePhoto"  class="btn btn-outline-dark"> Change photo</a>
+
+                        </div>
                     </div>
                     <div class="card-body text-center">
                         

@@ -14,6 +14,7 @@ namespace Movie_Point.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<ActorMovie> actorsMovies { get; set; }
         public DbSet<Cart> carts { get; set; }
+        public DbSet<RequestCinema> RequestCinemas { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

@@ -19,4 +19,7 @@
 	<ItemGroup>
 	  <Folder Include="wwwroot\images\AdminImg\" />
 	</ItemGroup>
+	<ItemGroup>
+	  <None Include="Models\RequestCinema.cs" />
+	</ItemGroup>
 </Project>

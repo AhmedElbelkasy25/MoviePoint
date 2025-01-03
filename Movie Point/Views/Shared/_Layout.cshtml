@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager;
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -38,6 +43,7 @@
                                     <a class="dropdown-item" href="/Category/Index">Categories</a>
                                     <a class="dropdown-item" href="/Actor/Index">Actor</a>
                                     <a class="dropdown-item" href="/User/Index">User</a>
+                                    <a class="dropdown-item" href="/RequestCinema/Index">Request Cinema</a>
 
 
                                 </div>
@@ -49,7 +55,24 @@
                     <ul class="navbar-nav">
                         @if(User.Identity.IsAuthenticated)
                         {
-                            <li> <span>Welcome </span> <a class="btn btn-dark" href="/account/GetProfile?name=@User.Identity.Name"> @User.Identity.Name </a></li>
+                            
+                            
+   
+                                var user = await userManager.GetUserAsync(User);
+
+                            <li>
+                                @if (user.ImgUrl == null)
+                                {
+                                    <img src="/images/AdminImg/Basic_Ui__28186_29.jpg" class="rounded-circle" style="width:40px;height:auto" />
+                                }
+                                else
+                                {
+                                    <img src="/images/AdminImg/@user.ImgUrl" class="rounded-3" style="width:35px;height:auto" />
+                                }
+                                 
+                                <span>Welcome </span>
+                                <a class="btn btn-outline-primary" href="/account/GetProfile?name=@User.Identity.Name"> @User.Identity.Name </a></li>
+                            
                             <li> <a class="btn btn-light" href="/Account/Logout">Logut </a></li>
                         }
                         else{
@@ -80,8 +103,13 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2024 - Movie_Point - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <div class="container text-center">
+            <div class="m-2">  Are you a new Cinema 
+                <a href="/RequestCinema/Create" class="btn btn-outline-danger">Register now</a> 
+            </div>
+           <div>
+               &copy; 2024 - Movie_Point - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
