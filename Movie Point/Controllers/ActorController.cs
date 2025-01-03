@@ -147,6 +147,7 @@ namespace Movie_Point.Controllers
                 System.IO.File.Delete(oldPath);
             }
             _actorRepository.Delete(actor);
+            _actorRepository.Saving();
             TempData["success"] = "deleted actor successfully";
             return RedirectToAction("index");
         }

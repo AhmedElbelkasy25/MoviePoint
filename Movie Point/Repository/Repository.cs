@@ -33,7 +33,7 @@ namespace Movie_Point.Repositroy
         public void Delete(T entity)
         {
             _dbSet.Remove(entity);
-            _dbContext.SaveChanges();
+            //_dbContext.SaveChanges();
         }
         public void Saving()
         {

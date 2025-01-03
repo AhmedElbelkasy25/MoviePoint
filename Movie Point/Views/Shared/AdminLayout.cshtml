@@ -1,0 +1,195 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> userManager;
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Movie_Point</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Movie_Point.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+</head>
+<body>
+    <header>
+        <nav id="navvv" class="navbar  navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index"> <img src="~/images/logo.png" style="width:100px;height:auto" /></a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Movie_Point</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                       
+                        <a class="btn" href="/Cart/Index"><i class="bi bi-cart4"></i></a>
+                    </ul>
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+
+
+
+                            var user = await userManager.GetUserAsync(User);
+
+                            <li>
+                                @if (user.ImgUrl == null)
+                                {
+                                    <img src="/images/AdminImg/Basic_Ui__28186_29.jpg" class="rounded-circle" style="width:40px;height:auto" />
+                                }
+                                else
+                                {
+                                    <img src="/images/AdminImg/@user.ImgUrl" class="rounded-3" style="width:35px;height:auto" />
+                                }
+
+                                <span>Welcome </span>
+                                <a class="btn btn-outline-primary" href="/account/GetProfile?name=@User.Identity.Name"> @User.Identity.Name </a>
+                            </li>
+
+                            <li> <a class="btn btn-light" href="/Account/Logout">Logut </a></li>
+                        }
+                        else
+                        {
+                            <li> <a class="btn btn-light" href="/Account/Login">Login </a></li>
+                            <li> <a class="btn btn-light" href="/Account/Register">Register </a></li>
+                        }
+                    </ul>
+                    <form class="d-flex" id="form1" asp-action="SearchForMovie" asp-controller="Movie" method="post">
+                        <input class="form-control" type="Text" id="name" name="Name" placeholder="Search For Movie" />
+                        <button type="submit" class="btn btn-danger"> Search   </button>
+                    </form>
+
+                    
+
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        
+            <div class="row">
+                
+
+                <nav id="sidebar" class="col-md-1 col-lg-1 d-md-block  sidebar">
+                    <div class="">
+                        <ul class="nav flex-column">
+                            
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Movie/Index">Movies</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Cinema/Index">Cinemas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Category/Index">Categories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Actor/Index">Actors</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/User/Index">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/RequestCinema/Index">Request Cinema</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                
+                <div >
+                <main role="main" class="pb-2 col-12">
+                        @RenderBody()
+                    </main>
+
+                </div>
+            </div>
+        
+        
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container text-center">
+            <div class="m-2">
+                Are you a new Cinema
+                <a href="/RequestCinema/Create" class="btn btn-outline-danger">Register now</a>
+            </div>
+            <div>
+                &copy; 2024 - Movie_Point - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+  
+
+  
+
+
+
+     <style>
+         #navvv{
+            position: fixed; 
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; 
+            margin-bottom: 0; 
+         }
+        
+        #sidebar {
+            position: fixed; 
+            top: 56px; 
+            left: 0;
+            width: 250px;
+            height: calc(100vh - 56px); 
+            overflow-y: auto; 
+            padding-top: 20px;
+            background-color: rgb(30, 42, 54);
+            
+        }
+
+        
+        main {
+            margin-left: 130px;
+            padding: 20px;
+            width:93.666667% ;
+            padding-top: 76px; 
+            height: calc(100vh - 56px); 
+            overflow-y: auto; 
+        }
+        
+        #sidebar li {
+            text-align:center;
+            margin-top:10px;
+            width:100% ;
+            
+            
+        }
+
+        #sidebar li :hover{
+                background-color: rgb(0, 42, 54);
+        }
+
+     </style>   
+    
+
+
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

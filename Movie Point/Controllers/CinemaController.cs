@@ -90,6 +90,7 @@ namespace Movie_Point.Controllers
             if (cinema != null)
             {
                 _cinemaRepository.Delete(cinema);
+                _cinemaRepository.Saving();
 
                 TempData["success"] = "Delete cinema successfuly";
 

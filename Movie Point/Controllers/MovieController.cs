@@ -218,6 +218,7 @@ namespace Movie_Point.Controllers
             }
 
             _movieRepository.Delete(movie);
+            _movieRepository.Saving();
 
             TempData["success"] = "Delete Movie successfully";
 

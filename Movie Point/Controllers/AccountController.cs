@@ -34,34 +34,35 @@ namespace Movie_Point.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult>  Register(LoginUserVM userLog , IFormFile? file)
+        public async Task<IActionResult>  Register(LoginUserVM userLog /*, IFormFile? file*/)
         {
             ModelState.Remove("ImgUrl");
+            ModelState.Remove("PhoneNumber");
             if (ModelState.IsValid)
             {
-                if (file != null && file.Length > 0)
-                {
-                    // Genereate name
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                //if (file != null && file.Length > 0)
+                //{
+                //    // Genereate name
+                //    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-                    // Save in wwwroot
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\AdminImg", fileName);
+                //    // Save in wwwroot
+                //    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\AdminImg", fileName);
 
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        file.CopyTo(stream);
-                    }
+                //    using (var stream = System.IO.File.Create(filePath))
+                //    {
+                //        file.CopyTo(stream);
+                //    }
 
-                    // Save in db
-                    userLog.ImgUrl = fileName;
-                }
+                //    // Save in db
+                //    userLog.ImgUrl = fileName;
+                //}
                 ApplicationUser user = new()
                 {
                     UserName = userLog.UserName,
                     Name = userLog.Name,
                     Email = userLog.Email,
-                    PhoneNumber = userLog.PhoneNumber,
-                    ImgUrl = userLog.ImgUrl,
+                    //PhoneNumber = userLog.PhoneNumber,
+                    //ImgUrl = userLog.ImgUrl,
                     ISBlocked = false
 
                 };
@@ -219,43 +220,15 @@ namespace Movie_Point.Controllers
             return RedirectToAction("NotFoundPage", "Home");
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(ApplicationUser user, IFormFile? file)
+        public async Task<IActionResult> Edit(ApplicationUser user)
         {
             ModelState.Remove("ImgUrl");
-            ModelState.Remove("file");
+            
             if (ModelState.IsValid)
             {
                 var userId = _userManager.GetUserId(User);
                 var oldUser = await _userManager.FindByIdAsync(userId);
 
-                
-                if (file != null && file.Length > 0)
-                {
-                    // Genereate name
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-
-                    // Save in wwwroot
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\AdminImg", fileName);
-
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        file.CopyTo(stream);
-                    }
-                    //delete old img
-                    if (oldUser.ImgUrl != null)
-                    {
-                        var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\AdminImg", oldUser.ImgUrl);
-                        if (System.IO.File.Exists(oldPath))
-                        {
-                            System.IO.File.Delete(oldPath);
-                        }
-                    }
-
-                    // Save in db
-                    oldUser.ImgUrl = fileName;
-                }
-                
-                
                 oldUser.Address = user.Address;
                 oldUser.Name = user.Name;
                 oldUser.UserName = user.UserName;
@@ -266,6 +239,47 @@ namespace Movie_Point.Controllers
                 return RedirectToAction("GetProfile" , "Account", new { name = User.Identity.Name });
             }
             return View(user);
+        }
+        public IActionResult ChangePhoto()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePhoto(IFormFile? file)
+        {
+            var userId = _userManager.GetUserId(User);
+            var oldUser = await _userManager.FindByIdAsync(userId);
+
+
+            if (file != null && file.Length > 0)
+            {
+                // Genereate name
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+                // Save in wwwroot
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\AdminImg", fileName);
+
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    file.CopyTo(stream);
+                }
+                //delete old img
+                if (oldUser.ImgUrl != null)
+                {
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\AdminImg", oldUser.ImgUrl);
+                    if (System.IO.File.Exists(oldPath))
+                    {
+                        System.IO.File.Delete(oldPath);
+                    }
+                }
+
+                // Save in db
+                oldUser.ImgUrl = fileName;
+            }
+
+            await _userManager.UpdateAsync(oldUser);
+            TempData["success"] = "Edit Photo successfully";
+            return RedirectToAction("GetProfile", "Account", new { name = User.Identity.Name });
         }
         public async Task<IActionResult> Logout()
         {

@@ -6,9 +6,12 @@ using Movie_Point.Models.ViewModels;
 using Movie_Point.Repository.IRepository;
 using Stripe.Checkout;
 using Stripe;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Movie_Point.Controllers
 {
+    
+    [Authorize]
     public class CartController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -96,28 +99,37 @@ namespace Movie_Point.Controllers
             };
             var carts = _cartRepository.Get(includeProps: e => e.Include(e => e.Movie),
                 filter: e => e.ApplicationUserId == _userManager.GetUserId(User)).ToList();
-            foreach (var item in carts)
+            if (carts.Any())
             {
-                options.LineItems.Add(
-                    new SessionLineItemOptions
-                    {
-                        PriceData = new SessionLineItemPriceDataOptions
-                        {
-                            Currency = "USD",
-                            ProductData = new SessionLineItemPriceDataProductDataOptions
-                            {
-                                Name = item.Movie.Name,
-                                Description = item.Movie.Description,
-                            },
-                            UnitAmount = (long)item.Movie.Price * 100,
-                        },
-                        Quantity = item.Count,
-                    });
-            }
 
-            var service = new SessionService();
-            var session = service.Create(options);
-            return Redirect(session.Url);
+
+                foreach (var item in carts)
+                {
+                    options.LineItems.Add(
+                        new SessionLineItemOptions
+                        {
+                            PriceData = new SessionLineItemPriceDataOptions
+                            {
+                                Currency = "USD",
+                                ProductData = new SessionLineItemPriceDataProductDataOptions
+                                {
+                                    Name = item.Movie.Name,
+                                    Description = item.Movie.Description,
+                                },
+                                UnitAmount = (long)item.Movie.Price * 100,
+                            },
+                            Quantity = item.Count,
+                        });
+                }
+
+                var service = new SessionService();
+                var session = service.Create(options);
+                return Redirect(session.Url);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
         }
 
     }

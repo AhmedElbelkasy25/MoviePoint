@@ -91,6 +91,7 @@ namespace Movie_Point.Controllers
             if (category != null)
             {
                 _categoryRepository.Delete(category);
+                _categoryRepository.Saving();   
 
                 TempData["success"] = "Delete Category successfuly";
 
