@@ -29,8 +29,8 @@ namespace Movie_Point.Controllers
         [AllowAnonymous]
         public IActionResult Index()
         {
-            var movies = _movieRepository.Get(includeProps: e => e.Include(e => e.Cinema).Include(e => e.Category)).ToList();
-            return View(movies);
+            var movies = _movieRepository.Get(includeProps: e => e.Include(e => e.Cinema).Include(e => e.Category));
+            return View(movies.ToList());
         }
 
         [AllowAnonymous]
