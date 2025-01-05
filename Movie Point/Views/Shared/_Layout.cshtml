@@ -32,42 +32,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        @if(User.IsInRole("Admin"))
-                        {
-                            <li class="nav-item">
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Management System</a>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="/Movie/Index">Movies</a>
-                                    <a class="dropdown-item" href="/Cinema/Index">Cinemas</a>
-                                    <a class="dropdown-item" href="/Category/Index">Categories</a>
-                                    <a class="dropdown-item" href="/Actor/Index">Actor</a>
-                                    <a class="dropdown-item" href="/User/Index">User</a>
-                                    <a class="dropdown-item" href="/RequestCinema/Index">Request Cinema</a>
-
-
-                                </div>
-                            </li>
-                            </li>
-                        }
+                        
                         <a class="btn" href="/Cart/Index"><i class="bi bi-cart4"></i></a>
                     </ul>
                     <ul class="navbar-nav">
                         @if(User.Identity.IsAuthenticated)
                         {
-                            
-                            
-   
                                 var user = await userManager.GetUserAsync(User);
 
                             <li>
                                 @if (user.ImgUrl == null)
                                 {
-                                    <img src="/images/AdminImg/Basic_Ui__28186_29.jpg" class="rounded-circle" style="width:40px;height:auto" />
+                                    <a href="/account/GetProfile?name=@User.Identity.Name">
+                                        <img src="/images/AdminImg/Basic_Ui__28186_29.jpg" class="rounded-circle" style="width:40px;height:auto" />
+                                    </a>
                                 }
                                 else
                                 {
-                                    <img src="/images/AdminImg/@user.ImgUrl" class="rounded-3" style="width:35px;height:auto" />
+                                    <a href="/account/GetProfile?name=@User.Identity.Name">
+                                        <img src="/images/AdminImg/@user.ImgUrl" class="rounded-3" style="width:35px;height:auto" />
+                                    </a>
                                 }
                                  
                                 <span>Welcome </span>
@@ -97,7 +81,7 @@
         </nav>
     </header>
     <div class="container">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3" style="min-height:100vh">
             @RenderBody()
         </main>
     </div>

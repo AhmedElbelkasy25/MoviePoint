@@ -17,14 +17,14 @@ namespace Movie_Point.Controllers
             _categoryRepository = categoryRepository;
             _movieRepository = movieRepository;
         }
-        [Authorize]
+        
         public IActionResult Index()
         {
             var categories = _categoryRepository.Get().ToList();
 
             return View(model:categories);
         }
-        [Authorize]
+        [AllowAnonymous]
         public IActionResult GetCategoryMovies(string CategoryName)
         {
             ViewBag.Category = CategoryName;

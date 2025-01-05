@@ -147,6 +147,7 @@ namespace Movie_Point.Controllers
             ModelState.Remove("Actors");
             ModelState.Remove("actorsMovies");
             ModelState.Remove("ImgUrl");
+            ModelState.Remove("file");
 
             var oldMovie = _movieRepository.GetOne(e => e.Id == movie.Id, tracked: false);
             if (ModelState.IsValid)

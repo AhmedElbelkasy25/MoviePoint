@@ -25,7 +25,7 @@ namespace Movie_Point.Controllers
             var cinemas = _cinemaRepository.Get().ToList();
             return View(cinemas);
         }
-        [Authorize]
+        [AllowAnonymous]
         public IActionResult GetCinemaMovies(string CinemaName)
         {
             ViewBag.cinema = CinemaName;

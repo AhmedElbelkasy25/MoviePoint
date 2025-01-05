@@ -29,14 +29,14 @@
                         {
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="p-2" style="background-color:saddlebrown">@item.MovieStatus</span>
-                                <span> <a id="aa" href="" style="background-color:green;width:150px" class="btn ml-5 p-1">Book Now</a></span>
+                                <span> <a id="aa" href="/Movie/Details/@item.Id" style="background-color:green;width:150px" class="btn ml-5 p-1">Book Now</a></span>
                             </div>
                         }
                         @if (item.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Available)
                         {
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="p-2" style="background-color:gold">@item.MovieStatus</span>
-                                <span> <a id="aa" href="" style="background-color:green;width:150px" class="btn ml-5 p-1">Book Now</a></span>
+                                <span> <a id="aa" href="/Movie/Details/@item.Id" style="background-color:green;width:150px" class="btn ml-5 p-1">Book Now</a></span>
                             </div>
                         }
                         @if (item.MovieStatus == Movie_Point.Data.Enums.MovieStatus.Expired)

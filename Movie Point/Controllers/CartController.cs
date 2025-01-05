@@ -81,6 +81,7 @@ namespace Movie_Point.Controllers
         {
             var movie = _cartRepository.GetOne(filter: e => e.MovieId == MovieId);
             _cartRepository.Delete(movie);
+            _cartRepository.Saving();
 
             return RedirectToAction("Index", "Cart");
         }

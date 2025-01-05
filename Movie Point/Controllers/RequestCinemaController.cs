@@ -40,7 +40,7 @@ namespace Movie_Point.Controllers
                 _requestCinema.Create(reqCinema);
 
                 TempData["success"] = "your request has been added successfully ";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
             return View(reqCinema); 
         }
