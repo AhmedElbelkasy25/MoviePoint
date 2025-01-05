@@ -29,44 +29,53 @@
                 </div>
                 <ul class="sidebar-nav">
                     <li class="sidebar-header">
-                         Elements
+                        Welcome @User.Identity.Name
                     </li>
                     <li class="sidebar-item">
-                        <a href="/movie/index" class="sidebar-link">
-                            <i class="fa-solid fa-list pe-2"></i>
-                            Movies
+                        <a href="#" class="sidebar-link collapsed" data-bs-target="#pages" data-bs-toggle="collapse"
+                           aria-expanded="false">
+                            <i class="fa-solid fa-file-lines pe-2"></i>
+                            Elemnets   <i class="bi bi-card-list"></i>
                         </a>
-                    </li>
+                        <ul id="pages" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                            <li class="sidebar-item">
+                                <a href="/movie/index" class="sidebar-link">
+                                    <i class="fa-solid fa-list pe-2"></i>
+                                    Movies <i class="bi bi-film"></i>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="/Cinema/index" class="sidebar-link">
+                                    <i class="fa-solid fa-list pe-2"></i>
+                                    Cinemas <i class="bi bi-camera-reels"></i>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="/Category/index" class="sidebar-link">
+                                    <i class="fa-solid fa-list pe-2"></i>
+                                    Category <i class="bi bi-bookmark-star"></i>
+                                </a>
+                            </li>
 
-                    
+                            <li class="sidebar-item">
+                                <a href="/User/index" class="sidebar-link">
+                                    <i class="fa-solid fa-list pe-2"></i>
+                                    Users <i class="bi bi-people"></i>
+                                </a>
+                            </li>
 
-                    <li class="sidebar-item">
-                        <a href="/Cinema/index" class="sidebar-link">
-                            <i class="fa-solid fa-list pe-2"></i>
-                            Cinemas
-                        </a>
+                            <li class="sidebar-item">
+                                <a href="/RequestCinema/index" class="sidebar-link">
+                                    <i class="fa-solid fa-list pe-2"></i>
+                                    Requested Cinema <i class="bi bi-folder-plus"></i>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
+                   
 
-                    <li class="sidebar-item">
-                        <a href="/Category/index" class="sidebar-link">
-                            <i class="fa-solid fa-list pe-2"></i>
-                            Category
-                        </a>
-                    </li>
 
-                    <li class="sidebar-item">
-                        <a href="/User/index" class="sidebar-link">
-                            <i class="fa-solid fa-list pe-2"></i>
-                            Users
-                        </a>
-                    </li>
 
-                    <li class="sidebar-item">
-                        <a href="/RequestCinema/index" class="sidebar-link">
-                            <i class="fa-solid fa-list pe-2"></i>
-                            Requested Cinema
-                        </a>
-                    </li>
                    
                 </ul>
             </div>
@@ -174,6 +183,7 @@
             opacity: 1;
             overflow-y: scroll;
             margin: 0;
+            
         }
 
         a {
@@ -198,6 +208,7 @@
             align-items: stretch;
             display: flex;
             width: 100%;
+            min-height:100vh;
         }
 
         #sidebar {
@@ -220,7 +231,15 @@
             margin-right:0;
         }
 
-       
+        .sidebar-logo {
+            padding: 1.15rem;
+        }
+
+            .sidebar-logo a {
+                color: #e9ecef;
+                font-size: 1.15rem;
+                font-weight: 600;
+            }
 
            
 

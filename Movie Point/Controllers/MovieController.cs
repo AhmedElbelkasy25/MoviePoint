@@ -97,7 +97,7 @@ namespace Movie_Point.Controllers
                     var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
                     // Save in wwwroot
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images", fileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\images\\movies", fileName);
 
                     using (var stream = System.IO.File.Create(filePath))
                     {
